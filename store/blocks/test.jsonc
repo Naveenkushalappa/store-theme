@@ -1,0 +1,28 @@
+{
+    "store.custom#test": {
+        "children": [
+            "flex-layout.row#test"
+        ]
+    },
+    "flex-layout.row#test": {
+        "children": [
+            "flex-layout.col#test"
+        ]
+    },
+    "flex-layout.col#test": {
+        "children": [
+            "rich-text#test",
+            "contact-us#test"
+        ]
+    },
+    "rich-text#test": {
+        "props": {
+            "text": "## This is a test message"
+        }
+    },
+    "contact-us#test": {
+        "props": {
+            "name": "Test message for contact us1234"
+        }
+    }
+}
