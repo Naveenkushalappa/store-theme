@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import './index.css';
 
 interface ContactUsProps {
     firstName: string;
@@ -12,35 +13,31 @@ interface ContactUsData {
     contactUsData: ContactUsProps[];
 }
 
-const ContactUsDetail = ({ firstName, lastName, contactNumber, location }: ContactUsProps) => {
-    return <div>{firstName} {lastName} {contactNumber} {location}</div>
-}
 
 const ContactUsTable = ({ contactUsData }: { contactUsData: ContactUsProps[] }) => {
-
     return (
-    <div>
-        <table>
-            <thead>
-                <tr>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Contact Number</th>
-                    <th>Location</th>
-                </tr>
-            </thead>
-            <tbody>
-                {contactUsData.map((contactUs: { firstName: string; lastName: string; contactNumber: number; location: string; }) => {
-                    return <tr>
-                        <td>{contactUs.firstName}</td>
-                        <td>{contactUs.lastName}</td>
-                        <td>{contactUs.contactNumber}</td>
-                        <td>{contactUs.location}</td>
+        <div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Contact Number</th>
+                        <th>Location</th>
                     </tr>
-                })}
-            </tbody>
-        </table>
-    </div>
+                </thead>
+                <tbody>
+                    {contactUsData.map((contactUs: { firstName: string; lastName: string; contactNumber: number; location: string; }) => {
+                        return <tr>
+                            <td>{contactUs.firstName}</td>
+                            <td>{contactUs.lastName}</td>
+                            <td>{contactUs.contactNumber}</td>
+                            <td>{contactUs.location}</td>
+                        </tr>
+                    })}
+                </tbody>
+            </table>
+        </div>
     )
 }
 
