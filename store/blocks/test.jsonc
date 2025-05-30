@@ -11,18 +11,12 @@
     },
     "flex-layout.col#test": {
         "children": [
-            "rich-text#test",
             "contact-us#test"
         ]
     },
-    "rich-text#test": {
-        "props": {
-            "text": "## This is a test message"
-        }
-    },
     "contact-us#test": {
         "props": {
-            "name": "Test message for contact us1234"
+            "pageSize": 2
         }
     }
 }
