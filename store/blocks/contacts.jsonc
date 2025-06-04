@@ -33,7 +33,7 @@
     },
     "contacts#contacts": {
         "props": {
-            "pageSize": "3",
+            "pageSize": 2,
             "title": "This table shows the list of contacts. Use load more button to load more"
         }
     }
