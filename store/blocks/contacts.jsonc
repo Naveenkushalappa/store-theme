@@ -1,0 +1,29 @@
+{
+    "store.custom#contacts": {
+        "blocks": [
+            "flex-layout.row#contacts"
+        ]
+    },
+    "flex-layout.row#contacts": {
+        "children": [
+            "flex-layout.col#contacts"
+        ]
+    },
+    "flex-layout.col#contacts": {
+        "children": [
+            "rich-text#contacts",
+            "contacts#contacts"
+        ]
+    },
+    "rich-text#contacts": {
+        "props": {
+            "text": "## Contact Us"
+        }
+    },
+    "contacts#contacts": {
+        "props": {
+            "pageSize": "3",
+            "title": "This table shows the list of contacts. Use load more button to load more"
+        }
+    }
+}

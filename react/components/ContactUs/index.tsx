@@ -13,6 +13,10 @@ interface ContactUsProps {
 interface ContactUsData {
     contactUsData: ContactUsProps[];
 }
+interface Props{
+    title: string
+    pageSize: number
+}
 
 
 const ContactUsTable = ({ contactUsData }: { contactUsData: ContactUsProps[] }) => {
@@ -83,7 +87,7 @@ const getContactUsData = async ({ start, end }: { start: number, end: number }, 
     }
     return response.data;
 }
-const ContactUs = ({ pageSize }: { pageSize: number }) => {
+const ContactUs = ({ pageSize, title }: Props) => {
     const [contactUsData, setContactUsData] = useState<ContactUsProps[]>([]);
     const [isPageLimitReached, setIsPageLimitReached] = useState(false);
     useEffect(() => {
@@ -117,6 +121,7 @@ const ContactUs = ({ pageSize }: { pageSize: number }) => {
     return (
         <div>
             <ContactUsTable contactUsData={contactUsData} />
+            <h3>{title}</h3>
             <button onClick={handleLoadMore} disabled={isPageLimitReached}>Load More</button>
         </div>
     )
