@@ -1,8 +1,19 @@
 {
     "store.custom#contacts": {
+        "parent": {
+            "header": "header#empty"
+        },
         "blocks": [
             "flex-layout.row#contacts"
         ]
+    },
+    "header#empty": {
+        "blocks": [
+            "header-layout.desktop#empty"
+        ]
+    },
+    "header-layout.desktop#empty": {
+        "children": []
     },
     "flex-layout.row#contacts": {
         "children": [
