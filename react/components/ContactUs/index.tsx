@@ -7,6 +7,7 @@ interface ContactUsProps {
     lastName: string;
     contactNumber: number;
     location: string;
+    id: number;
 }
 
 interface ContactUsData {
@@ -27,8 +28,8 @@ const ContactUsTable = ({ contactUsData }: { contactUsData: ContactUsProps[] }) 
                     </tr>
                 </thead>
                 <tbody>
-                    {contactUsData.map((contactUs: { firstName: string; lastName: string; contactNumber: number; location: string; }) => {
-                        return <tr>
+                    {contactUsData.map((contactUs: { firstName: string; lastName: string; contactNumber: number; location: string; id: number }) => {
+                        return <tr key={contactUs.id}>
                             <td>{contactUs.firstName}</td>
                             <td>{contactUs.lastName}</td>
                             <td>{contactUs.contactNumber}</td>
@@ -40,6 +41,29 @@ const ContactUsTable = ({ contactUsData }: { contactUsData: ContactUsProps[] }) 
         </div>
     )
 }
+
+const getContactUsDataFromBackend = async ({ start, end }: { start: number, end: number }) => {
+    try {
+        const config = {
+            method: 'get',
+            url: '/_v/dataEntities',
+            params: {
+                start,
+                end
+            },
+            timeout: 5000,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        };
+
+        const response = await axios.request(config);
+        return response.data;
+    } catch (error) {
+        console.error('Error details:', error);
+        throw error;
+    }
+};
 
 const getContactUsData = async ({ start, end }: { start: number, end: number }, setIsPageLimitReached: (isPageLimitReached: boolean) => void) => {
     const response = await axios.get('/api/dataentities/NC/search?_size=5&_fields=_all', {
@@ -63,18 +87,31 @@ const ContactUs = ({ pageSize }: { pageSize: number }) => {
     const [contactUsData, setContactUsData] = useState<ContactUsProps[]>([]);
     const [isPageLimitReached, setIsPageLimitReached] = useState(false);
     useEffect(() => {
-        getContactUsData({ start: 0, end: pageSize }, setIsPageLimitReached).then((response) => {
-            setContactUsData(response);
-        });
-    }, [])
+        const fetchData = async () => {
+            try {
+                const response = await getContactUsDataFromBackend({ start: 0, end: pageSize });
+                setContactUsData(response);
+            } catch (error) {
+                console.error('Error in useEffect:', error);
+            }
+        };
+    
+        fetchData();
+    }, [pageSize]);
 
-    const handleLoadMore = () => {
-        getContactUsData({ start: contactUsData.length, end: contactUsData.length + pageSize }, setIsPageLimitReached).then((response) => {
+    const handleLoadMore = async () => {
+        try {
+            const response = await getContactUsDataFromBackend({ 
+                start: contactUsData.length, 
+                end: contactUsData.length + pageSize 
+            });
             setContactUsData([...contactUsData, ...response]);
             if (response.length < pageSize) {
                 setIsPageLimitReached(true);
             }
-        });
+        } catch (error) {
+            console.error('Error loading more data:', error);
+        }
     }
 
     return (
