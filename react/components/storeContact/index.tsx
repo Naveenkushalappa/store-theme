@@ -1,17 +1,106 @@
-import React, { useState } from "react";
-import styles from "./index.css";
+import React, { useState } from "react"
+import { useMutation as useApolloMutation } from 'react-apollo'
+import { ApolloError } from 'apollo-client'
+import ADD_DOCUMENT from '../../graphql/addDocument.gql'
+
+import styles from './index.css'
+
+interface DocumentField {
+    key: string;
+    value: string;
+    type: 'STRING';
+}
+
+interface DocumentInput {
+    fields: DocumentField[];
+    metadata?: {
+        type: string;
+    };
+}
+
+interface AddDocumentVariables {
+    acronym: string;
+    document: DocumentInput;
+}
 
 const StoreContact = () => {
-    const [name, setName] = useState("");
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [contactNumber, setContactNumber] = useState("");
     const [email, setEmail] = useState("");
     const [subject, setSubject] = useState("");
     const [message, setMessage] = useState("");
     const [file, setFile] = useState<File | null>(null);
+    const [submitError, setSubmitError] = useState<string | null>(null);
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const [addDocument, { loading, error, data }] = useApolloMutation<any, AddDocumentVariables>(ADD_DOCUMENT, {
+        onError: (error: ApolloError) => {
+            console.error('Mutation error details:', {
+                message: error.message,
+                graphQLErrors: error.graphQLErrors?.map(err => ({
+                    message: err.message,
+                    path: err.path,
+                    extensions: err.extensions
+                })),
+                networkError: error.networkError
+            });
+            setSubmitError(error.message);
+        },
+        onCompleted: (data) => {
+            console.log('Mutation completed with data:', data);
+            // Clear form on success
+            clearForm();
+        }
+    });
+
+    const clearForm = () => {
+        setFirstName('');
+        setLastName('');
+        setEmail('');
+        setContactNumber('');
+        setSubject('');
+        setMessage('');
+        setFile(null);
+        setSubmitError(null);
+    };
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log(name, email, subject, message, file);
-    }
+        setSubmitError(null);
+        
+        const documentInput: DocumentInput = {
+            fields: [
+                { key: 'firstName', value: firstName, type: 'STRING' },
+                { key: 'lastName', value: lastName, type: 'STRING' },
+                { key: 'email', value: email, type: 'STRING' },
+                { key: 'contactNumber', value: contactNumber, type: 'STRING' },
+                { key: 'subject', value: subject, type: 'STRING' },
+                { key: 'message', value: message, type: 'STRING' }
+            ],
+            metadata: {
+                type: 'contact_form'
+            }
+        };
+
+        try {
+            const response = await addDocument({
+                variables: {
+                    acronym: 'NC',
+                    document: documentInput
+                }
+            });
+            
+            if (response.data) {
+                console.log('Mutation successful:', response.data);
+            } else {
+                setSubmitError('No data returned from server');
+            }
+        } catch (err) {
+            const error = err as ApolloError;
+            console.error('Submission error:', error);
+            setSubmitError(error.message || 'An error occurred while submitting the form');
+        }
+    };
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -19,38 +108,64 @@ const StoreContact = () => {
             setFile(file);
         }
     }
+
+    // Add error display in the UI
+    React.useEffect(() => {
+        if (error) {
+            console.error('Apollo error state:', error);
+        }
+    }, [error]);
+
+    if (typeof window === 'undefined') return null
+
     return (
         <div className={styles.formContainer}>
-            <h3 className="text-xl font-bold mb-4">Enter contact details</h3>
-            <div className="w-full">
+            <h3 className={styles.textXlFontBoldMb4}>Enter contact details</h3>
+            {submitError && (
+                <div className={styles.errorMessage}>
+                    {submitError}
+                </div>
+            )}
+            <div className={styles.wFull}>
                 <form onSubmit={handleSubmit} className={styles.form}>
                     <div className={styles.formGroup}>
-                        <label htmlFor="name" className={styles.label}>Name</label>
-                        <input type="text" id="name" placeholder="Name" required value={name} onChange={(e) => setName(e.target.value)} 
-                        className={styles.input} />
+                        <label htmlFor="firstName" className={styles.label}>First Name</label>
+                        <input type="text" id="firstName" placeholder="First name" required value={firstName} onChange={(e) => setFirstName(e.target.value)}
+                            className="input" />
                     </div>
-
+                    <div className={styles.formGroup}>
+                        <label htmlFor="lastName" className={styles.label}>Last Name</label>
+                        <input type="text" id="lastName" placeholder="Last name" required value={lastName} onChange={(e) => setLastName(e.target.value)}
+                            className="input" />
+                    </div>
+                    <div className={styles.formGroup}>
+                        <label htmlFor="contactNumber" className={styles.label}>Contact Number</label>
+                        <input type="number" id="contactNumber" placeholder="Contact number" required value={contactNumber} onChange={(e) => setContactNumber(e.target.value)}
+                            className="input" />
+                    </div>
                     <div className={styles.formGroup}>
                         <label htmlFor="email" className={styles.label}>Email</label>
-                        <input type="email" id="email" placeholder="Email" value={email} required onChange={(e) => setEmail(e.target.value)} className={styles.input} />
+                        <input type="email" id="email" placeholder="Email" value={email} required onChange={(e) => setEmail(e.target.value)} className="input" />
                     </div>
 
                     <div className={styles.formGroup}>
                         <label htmlFor="subject" className={styles.label}>Subject</label>
-                        <input type="text" id="subject" placeholder="Subject" required value={subject} onChange={(e) => setSubject(e.target.value)} className={styles.input} />
+                        <input type="text" id="subject" placeholder="Subject"  value={subject} onChange={(e) => setSubject(e.target.value)} className="input" />
                     </div>
 
                     <div className={styles.formGroup}>
                         <label htmlFor="message" className={styles.label}>Message</label>
-                        <textarea id="message" placeholder="Message" value={message} required onChange={(e) => setMessage(e.target.value)} className={styles.input} />
+                        <textarea id="message" placeholder="Message" value={message} onChange={(e) => setMessage(e.target.value)} className="input" />
                     </div>
 
                     <div className={styles.formGroup}>
                         <label htmlFor="file" className={styles.label}>File</label>
-                        <input type="file" id="file" accept="image/jpeg, image/png" required onChange={handleFileChange} className={styles.input} />
+                        <input type="file" id="file" accept="image/jpeg, image/png" onChange={handleFileChange} className={styles.input} />
                     </div>
 
-                    <button type="submit" className={styles.button}>Submit</button>
+                    <button type="submit" disabled={loading} className={styles.button}>
+                        {loading ? 'Submitting...' : 'Submit'}
+                    </button>
                 </form>
             </div>
         </div>

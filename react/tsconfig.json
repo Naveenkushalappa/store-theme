@@ -15,6 +15,6 @@
       "jsx": "react",
       "allowSyntheticDefaultImports": true
     },
-    "include": ["./**/*.ts", "./**/*.tsx", "StoreContactWrapper.js"],
+    "include": ["./**/*.ts", "./**/*.tsx", "StoreContactWrapper.js", "custom.d.ts"],
     "exclude": ["node_modules"]
   } 

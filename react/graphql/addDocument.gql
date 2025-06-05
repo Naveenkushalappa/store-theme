@@ -1,0 +1,6 @@
+mutation addDocument($acronym: String!, $document: DocumentInput){
+    createDocument(acronym: $acronym, document: $document){
+        id
+        documentId
+    }
+}

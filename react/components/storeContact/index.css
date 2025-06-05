@@ -5,35 +5,37 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     padding: 20px;
-  }
-  
-  .form {
+}
+
+.form {
     display: flex;
     flex-direction: column;
     gap: 20px;
-  }
-  
-  .formGroup {
+}
+
+.formGroup {
     display: flex;
     flex-direction: column;
-  }
-  
-  .label {
+}
+
+.label {
     margin-bottom: 8px;
     font-weight: 600;
-  }
-  
-  .input {
+}
+
+.input {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
-  }
-  .input #file {
+}
+
+.input #file {
     padding: 20px;
     border: 1px solid #777;
     border-radius: 4px;
-  }
-  .button {
+}
+
+.button {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -41,8 +43,8 @@
     color: #fff;
     cursor: pointer;
     transition: background-color 0.3s ease;
+
     &:hover {
         background-color: #0d5a2c92;
     }
-  }
-  
+}
