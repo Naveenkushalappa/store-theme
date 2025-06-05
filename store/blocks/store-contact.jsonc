@@ -1,0 +1,39 @@
+{
+    "store.custom#store-contact": {
+        "parent": {
+            "header": "header#empty"
+        },
+        "blocks": [
+            "flex-layout.row#storeContact"
+        ]
+    },
+    "header#empty": {
+        "blocks": [
+            "header-layout.desktop#empty"
+        ]
+    },
+    "header-layout.desktop#empty": {
+        "children": []
+    },
+    "flex-layout.row#storeContact": {
+        "children": [
+            "flex-layout.col#storeContact"
+        ]
+    },
+    "flex-layout.col#storeContact": {
+        "children": [
+            "rich-text#storeContact",
+            "storeContactUs#storeContact"
+        ]
+    },
+    "rich-text#storeContact": {
+        "props": {
+            "text": "## Contact Us"
+        }
+    },
+    "storeContactUs#storeContact": {
+        "props": {
+            "title": "Store contact form!!!"
+        }
+    }
+}

@@ -1,0 +1,33 @@
+{
+    "store.custom#test": {
+        "parent": {
+            "header": "header#empty"
+        },
+        "blocks": [
+            "flex-layout.row#test"
+        ]
+    },
+    "header#empty": {
+        "blocks": [
+            "header-layout.desktop#empty"
+        ]
+    },
+    "header-layout.desktop#empty": {
+        "children": []
+    },
+    "flex-layout.row#test": {
+        "children": [
+            "flex-layout.col#test"
+        ]
+    },
+    "flex-layout.col#test": {
+        "children": [
+            "rich-text#test"
+        ]
+    },
+    "rich-text#test": {
+        "props": {
+            "text": "## Contact Us"
+        }
+    }
+}
