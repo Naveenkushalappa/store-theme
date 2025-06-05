@@ -10,8 +10,5 @@
   },
   "store.custom#store-contact": {
     "path": "/store-contact"
-  },
-  "store.custom#test": {
-    "path": "/test"
   }
 }

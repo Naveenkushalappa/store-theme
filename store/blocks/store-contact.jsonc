@@ -1,19 +1,8 @@
 {
     "store.custom#store-contact": {
-        "parent": {
-            "header": "header#empty"
-        },
         "blocks": [
             "flex-layout.row#storeContact"
         ]
-    },
-    "header#empty": {
-        "blocks": [
-            "header-layout.desktop#empty"
-        ]
-    },
-    "header-layout.desktop#empty": {
-        "children": []
     },
     "flex-layout.row#storeContact": {
         "children": [
@@ -32,8 +21,6 @@
         }
     },
     "storeContactUs#storeContact": {
-        "props": {
-            "title": "Store contact form!!!"
-        }
+        "props": {}
     }
 }
