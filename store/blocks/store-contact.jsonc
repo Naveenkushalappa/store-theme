@@ -1,0 +1,26 @@
+{
+    "store.custom#store-contact": {
+        "blocks": [
+            "flex-layout.row#storeContact"
+        ]
+    },
+    "flex-layout.row#storeContact": {
+        "children": [
+            "flex-layout.col#storeContact"
+        ]
+    },
+    "flex-layout.col#storeContact": {
+        "children": [
+            "rich-text#storeContact",
+            "storeContactUs#storeContact"
+        ]
+    },
+    "rich-text#storeContact": {
+        "props": {
+            "text": "## Contact Us"
+        }
+    },
+    "storeContactUs#storeContact": {
+        "props": {}
+    }
+}
