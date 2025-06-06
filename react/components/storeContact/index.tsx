@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { useMutation as useApolloMutation } from 'react-apollo'
+import { useMutation } from 'react-apollo'
 import { ApolloError } from 'apollo-client'
 import ADD_DOCUMENT from '../../graphql/addDocument.gql'
 
@@ -23,6 +23,13 @@ interface AddDocumentVariables {
     document: DocumentInput;
 }
 
+// const addDocumentMutation  = gql`mutation addDocument($acronym: String!, $document: DocumentInput){
+//     createDocument(acronym: $acronym, document: $document){
+//         id
+//         documentId
+//     }
+// }`
+
 const StoreContact = () => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
@@ -33,7 +40,7 @@ const StoreContact = () => {
     const [file, setFile] = useState<File | null>(null);
     const [submitError, setSubmitError] = useState<string | null>(null);
 
-    const [addDocument, { loading, error, data }] = useApolloMutation<any, AddDocumentVariables>(ADD_DOCUMENT, {
+    const [addDocument, { loading, error, data }] = useMutation(ADD_DOCUMENT, {
         onError: (error: ApolloError) => {
             console.error('Mutation error details:', {
                 message: error.message,
@@ -48,7 +55,6 @@ const StoreContact = () => {
         },
         onCompleted: (data) => {
             console.log('Mutation completed with data:', data);
-            // Clear form on success
             clearForm();
         }
     });
@@ -82,11 +88,21 @@ const StoreContact = () => {
             }
         };
 
+        console.log('Submitting with variables:', {
+            acronym: 'NC',
+            document: documentInput
+        });
+
         try {
             const response = await addDocument({
                 variables: {
                     acronym: 'NC',
                     document: documentInput
+                },
+                context: {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
                 }
             });
             
