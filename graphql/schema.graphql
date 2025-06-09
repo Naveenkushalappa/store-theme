@@ -1,0 +1,17 @@
+type Query {
+  _empty: String
+}
+
+type DocumentInput {
+  fields: [Field!]!
+}
+
+type Field {
+  key: String!
+  value: String!
+  type: FieldType!
+}
+
+enum FieldType {
+  STRING
+} 

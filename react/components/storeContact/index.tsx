@@ -8,14 +8,10 @@ import styles from './index.css'
 interface DocumentField {
     key: string;
     value: string;
-    type: 'STRING';
 }
 
 interface DocumentInput {
     fields: DocumentField[];
-    metadata?: {
-        type: string;
-    };
 }
 
 interface AddDocumentVariables {
@@ -23,12 +19,6 @@ interface AddDocumentVariables {
     document: DocumentInput;
 }
 
-// const addDocumentMutation  = gql`mutation addDocument($acronym: String!, $document: DocumentInput){
-//     createDocument(acronym: $acronym, document: $document){
-//         id
-//         documentId
-//     }
-// }`
 
 const StoreContact = () => {
     const [firstName, setFirstName] = useState("");
@@ -54,7 +44,6 @@ const StoreContact = () => {
             setSubmitError(error.message);
         },
         onCompleted: (data) => {
-            console.log('Mutation completed with data:', data);
             clearForm();
         }
     });
@@ -73,35 +62,19 @@ const StoreContact = () => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setSubmitError(null);
-        
-        const documentInput: DocumentInput = {
-            fields: [
-                { key: 'firstName', value: firstName, type: 'STRING' },
-                { key: 'lastName', value: lastName, type: 'STRING' },
-                { key: 'email', value: email, type: 'STRING' },
-                { key: 'contactNumber', value: contactNumber, type: 'STRING' },
-                { key: 'subject', value: subject, type: 'STRING' },
-                { key: 'message', value: message, type: 'STRING' }
-            ],
-            metadata: {
-                type: 'contact_form'
-            }
-        };
 
-        console.log('Submitting with variables:', {
-            acronym: 'NC',
-            document: documentInput
-        });
-
+        //todo: add file upload as location.
         try {
             const response = await addDocument({
                 variables: {
                     acronym: 'NC',
-                    document: documentInput
-                },
-                context: {
-                    headers: {
-                        'Content-Type': 'application/json',
+                    document: {
+                        fields: [
+                            { key: 'firstName', value: firstName },
+                            { key: 'lastName', value: lastName },
+                            { key: 'contactNumber', value: contactNumber },
+                            { key: 'location', value: "test" }
+                        ]
                     }
                 }
             });
