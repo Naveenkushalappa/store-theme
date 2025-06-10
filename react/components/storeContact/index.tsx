@@ -15,8 +15,10 @@ const StoreContact = () => {
     const [contactNumber, setContactNumber] = useState("");
     const [location, setLocation] = useState("");
     const [file, setFile] = useState<File | null>(null);
+    const [fileUrl, setFileUrl] = useState<string>("");
     const [submitError, setSubmitError] = useState<string | null>(null);
     const [submitSuccess, setSubmitSuccess] = useState<string | null>(null);
+    const [isUploading, setIsUploading] = useState(false);
 
     const recaptcha = useRef<ReCAPTCHA>(null)
 
@@ -45,8 +47,49 @@ const StoreContact = () => {
         setContactNumber('');
         setLocation('');
         setFile(null);
+        setFileUrl('');
         setSubmitError(null);
         setSubmitSuccess(null);
+    };
+
+    const uploadFile = async (file: File, documentId: string): Promise<void> => {
+        try {
+            setIsUploading(true);
+            const myHeaders = new Headers();
+            myHeaders.append("Accept", "application/vnd.vtex.ds.v10+json");
+            myHeaders.append("X-VTEX-API-AppKey", "vtexappkey-trika-EGMFAJ");
+            myHeaders.append("X-VTEX-API-AppToken", "PMBEGIZOAKIJMNJPTEHUEGCMEPNACEGLWWMHTWGQAAHMXWQEQDVFERPKDWXIJIRHFLHITNITFTWNTYDETOASVOWJJWEWRQMAKVSQODHHMMTAVZXBVVCLIXHAOXHZSOWB");
+
+            const formdata = new FormData();
+            formdata.append("file", file);
+
+            const response = await fetch(`https://trika.vtexcommercestable.com.br/api/dataentities/NC/documents/${documentId}/fileLink/attachments`, {
+                method: "POST",
+                headers: {
+                    ...myHeaders,
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'POST',
+                    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+                    // 'X-VTEX-Use-Https': 'true'
+                },
+                body: formdata,
+                redirect: "follow",
+                mode: 'cors',
+                credentials: 'include'
+            });
+
+            if (!response.ok) {
+                throw new Error('File upload failed');
+            }
+
+            const data = await response.json();
+            console.log(data, "file upload response");
+        } catch (error) {
+            console.error('File upload error:', error);
+            throw error;
+        } finally {
+            setIsUploading(false);
+        }
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -69,12 +112,22 @@ const StoreContact = () => {
                             { key: 'firstName', value: firstName },
                             { key: 'lastName', value: lastName },
                             { key: 'contactNumber', value: contactNumber },
-                            { key: 'location', value: location },
-                            { key: 'fileLink', value: file }
+                            { key: 'location', value: location }
                         ]
                     }
                 }
             });
+
+            if (response?.data?.createDocument?.documentId && file) {
+                try {
+                    await uploadFile(file, response.data.createDocument.documentId);
+                    console.log('File uploaded successfully');
+                } catch (error) {
+                    console.error('File upload failed:', error);
+                    setSubmitError('File upload failed, but contact information was saved.');
+                    return;
+                }
+            }
 
             if (response && response?.data) {
                 console.log('Mutation successful:', response.data);

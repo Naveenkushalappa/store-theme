@@ -1,6 +1,7 @@
 {
   "vendor": "trika",
   "name": "store-theme",
+  "title": "Trika Store Theme",
   "version": "5.2.0",
   "builders": {
     "styles": "2.x",
