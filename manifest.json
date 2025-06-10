@@ -71,5 +71,16 @@
   "peerDependencies": {
     "vtex.reviews-and-ratings": "3.x"
   },
+  "settingsSchema": {
+    "title": "App Settings",
+    "type": "object",
+    "properties": {
+      "REACT_APP_SITE_KEY": {
+        "title": "Recaptcha Site Key",
+        "type": "string",
+        "default": "null"
+      }
+    }
+  },
   "$schema": "https://raw.githubusercontent.com/vtex/node-vtex-api/master/gen/manifest.schema"
 }

@@ -9,7 +9,6 @@ type DocumentInput {
 type Field {
   key: String!
   value: String!
-  type: FieldType!
 }
 
 enum FieldType {

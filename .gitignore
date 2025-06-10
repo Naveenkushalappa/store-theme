@@ -35,3 +35,5 @@ npm-debug.log
 lib
 *.orig
 react/package-lock.json
+
+.env
