@@ -1,8 +1,7 @@
 {
   "vtex.menu@2.x:menu#websites": {
     "children": [
-      "menu-item#shop",
-      "menu-item#about-us"
+      "megaMenu"
     ]
   },
   "menu-item#shop": {
